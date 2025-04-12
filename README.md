@@ -15,8 +15,9 @@ This is the backend API for the NICU Grad mobile health tracking app. It uses **
 
 ## 🚀 Live API URL
 
-> https://nicu-grad-api.onrender.com/
-
+```
+https://nicu-grad-api.onrender.com/
+```
 ---
 
 ## 🧰 Requirements
@@ -33,7 +34,7 @@ This is the backend API for the NICU Grad mobile health tracking app. It uses **
 1. **Clone the repo:**
 
    ```bash
-   git clone https://github.com/YOUR_ORG/nicu-grad.git
+  
    cd nicu_grad_backend
 
     Install dependencies:
