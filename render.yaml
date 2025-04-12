@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: nicu-grad-api
+    env: node
+    rootDir: nicu_grad_backend
+    buildCommand: npm install && npx prisma generate
+    startCommand: node index.js
+    envVars:
+      - key: DATABASE_URL
+        sync: false  # you'll set this securely in the Render UI
