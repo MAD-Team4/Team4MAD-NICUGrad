@@ -1,15 +1,67 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Feeding {
+  id            Int      @id @default(autoincrement())
+  method        String   // 'breast', 'bottle', 'tube'
+  side          String?  // 'left' or 'right' if breast
+  volume        Int?     // for bottle/tube
+  duration      Int?     // in minutes
+  pumpedVolume  Int?     // if pumping
+  preWeight     Float?   // optional weight before feeding
+  postWeight    Float?   // optional weight after feeding
+  endedAt       DateTime @default(now())
+  nextDue       DateTime?
+}
+
+model Diaper {
+  id          Int      @id @default(autoincrement())
+  type        String   // 'wet', 'dirty', or 'mixed'
+  weightGrams Int?     // for I/O tracking
+  frequency   Int?     // times per day (optional summary)
+  createdAt   DateTime @default(now())
+}
+
+model Medication {
+  id           Int      @id @default(autoincrement())
+  name         String
+  dosage       String
+  givenAt      DateTime @default(now())
+  nextDoseDue  DateTime
+}
+
+model Growth {
+  id        Int      @id @default(autoincrement())
+  weightG   Float    // weight in grams
+  measuredAt DateTime @default(now())
+}
+
+model Vitals {
+  id        Int      @id @default(autoincrement())
+  tempC     Float
+  recordedAt DateTime @default(now())
+}
+
+model SleepLog {
+  id         Int      @id @default(autoincrement())
+  startTime  DateTime
+  endTime    DateTime
+  quality    String?  // e.g., "good", "light", "interrupted"
+}
+
+model HealthEvent {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  recordedAt  DateTime @default(now())
+  photoUrl    String?  // optional link to image
+  videoUrl    String?  // optional link to video
+  tags        String[] // e.g., ["seizure", "vomiting"]
+}
+
