@@ -10,3 +10,6 @@ netsh advfirewall firewall add rule name="NodeJS_Private" ^
 netsh advfirewall firewall add rule name="ExpoDevPorts_Outbound" ^
   dir=out action=allow protocol=TCP localport=19000,19001,19002,19006 ^
   profile=private enable=yes
+
+
+
