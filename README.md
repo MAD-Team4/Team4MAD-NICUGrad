@@ -1,86 +1,144 @@
-# Team4MAD — NICU Grad Backend
+# Team4MAD — NICU Grad App
 
-This is the backend API for the NICU Grad mobile health tracking app. It uses **Node.js**, **Express**, **Prisma**, and **PostgreSQL**, and is deployed on **Render**.
+NICU Grad is a mobile health tracking app designed to help parents transition their infants from the NICU to home. This repository includes:
 
----
-
-## 📦 Tech Stack
-
-- **Node.js** + **Express.js**
-- **Prisma ORM**
-- **PostgreSQL** (via Render)
-- **Hosted on**: [Render.com](https://render.com)
+- 🖥️ **Backend** (Express + Prisma + PostgreSQL)
+- 📱 **Frontend** (React Native with Expo Go)
 
 ---
 
-## 🚀 Live API URL
+## 🚀 Quick Start (Local Dev)
 
+```bash
+git clone  https://github.com/MAD-Team4/Team4MAD-NICUGrad.git
+cd nicu-grad
 ```
-https://nicu-grad-api.onrender.com/
+
+Then follow these setup steps:
+
+---
+
+## 🔧 Backend Setup (Node.js + Prisma + PostgreSQL)
+
+1. Navigate to the backend folder:
+
+```bash
+cd nicu_grad_backend
 ```
----
 
-## 🧰 Requirements
+2. Install dependencies:
 
-- Node.js (18+ recommended)
-- npm
-- GitHub access to the repository
-- Access to Render Dashboard (for managing deployments and database)
-
----
-
-## 🛠 Local Development Setup
-
-1. **Clone the repo:**
-
-   ```bash
-  
-   cd nicu_grad_backend
-
-    Install dependencies:
-
+```bash
 npm install
+```
 
-Create .env file:
+3. Create a `.env` file with this content:
 
-Inside the nicu_grad_backend folder, create a file named .env and paste this:
-
+```env
 DATABASE_URL="postgresql://nicu_db_user:g57MalTGanG8zpFEQdOoJmuAwK5PaqGI@dpg-cvtcfnp5pdvs739lh030-a.oregon-postgres.render.com/nicu_db"
+```
 
-Generate Prisma Client:
+4. Generate the Prisma client:
 
+```bash
 npx prisma generate
+```
 
-(Optional) Run Local Migrations:
+5. (Optional) Run local migration:
 
-    npx prisma migrate dev --name init
+```bash
+npx prisma migrate dev --name init
+```
 
-🔄 Keeping in Sync with Render
+> ✅ Your backend API should now be ready.
 
-After schema updates:
+---
 
+## 🌐 Render Deployment
+
+The backend is deployed via [Render](https://render.com/).
+
+- **Live API URL**:
+
+  ```
+  https://nicu-grad-api.onrender.com/
+  ```
+
+If you update your Prisma schema:
+
+```bash
 npx prisma migrate dev --name some_change
 git add .
 git commit -m "Updated schema"
 git push origin your-branch
+```
 
-Then on Render (via shell):
+Then deploy to Render:
 
+```bash
 npx prisma migrate deploy
+```
 
-📂 Project Structure
+---
 
-nicu_grad_backend/
-├── prisma/
-│   └── schema.prisma
-├── index.js
-├── .env                # Local database connection
-├── package.json
-└── render.yaml         # Render deployment config
+## 📱 Frontend Setup (React Native + Expo)
 
-🔗 Useful Commands
-Task	Command
-Start dev server	npm start or node index.js
-Prisma generate	npx prisma generate
-Migrate (local)	npx prisma migrate dev --name init
-Migrate (Render)	npx prisma migrate deploy
+1. Navigate to the frontend folder:
+
+```bash
+cd ../nicu_grad_frontend
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the Expo development server:
+
+```bash
+npx expo start
+```
+
+4. Scan the QR code with the **Expo Go app** on your mobile device.
+
+---
+
+## 📂 Project Structure
+
+```
+nicu-grad/
+├── nicu_grad_backend/   # Express backend with Prisma
+│   ├── index.js
+│   ├── prisma/
+│   └── .env
+├── nicu_grad_frontend/  # Expo + React Native frontend
+│   ├── app/
+│   ├── index.js
+└── README.md
+```
+
+---
+
+## 🧰 Commands Reference
+
+| Task                        | Command                              |
+|----------------------------|--------------------------------------|
+| Start backend              | `cd nicu_grad_backend && node index.js` |
+| Start frontend (Expo)      | `cd nicu_grad_frontend && npx expo start` |
+| Install backend packages   | `npm install` (in backend folder)    |
+| Install frontend packages  | `npm install` (in frontend folder)   |
+| Prisma generate            | `npx prisma generate`                |
+| Prisma migrate (local)     | `npx prisma migrate dev --name init` |
+| Prisma migrate (Render)    | `npx prisma migrate deploy`          |
+
+---
+
+## ✅ You're All Set
+
+Once both backend and frontend are installed, you can:
+
+- Start your backend via `node index.js`
+- Run your frontend with `npx expo start`
+- Develop fully locally, with the backend connected to your Render PostgreSQL instance
