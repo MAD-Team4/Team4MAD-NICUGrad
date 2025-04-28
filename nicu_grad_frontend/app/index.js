@@ -16,9 +16,15 @@ export default function HomeScreen() {
     <View style={styles.screen}>
       <ScrollView contentContainerStyle={styles.tileContainer}>
         {tools.map((tool, i) => (
-          <TouchableOpacity key={i} style={styles.tile}>
-            <Text style={styles.tileText}>{tool}</Text>
-          </TouchableOpacity>
+          <Link
+            key={i}
+            href={`/${tool.toLowerCase().replace(/\s+/g, '-')}`}
+            asChild
+          >
+            <TouchableOpacity style={styles.tile}>
+              <Text style={styles.tileText}>{tool}</Text>
+            </TouchableOpacity>
+          </Link>
         ))}
       </ScrollView>
 
