@@ -7,6 +7,7 @@ import NotesInput from '../components/NotesInput';
 import WeightInputCard from '../components/WeightInputCard';
 import { useNavigation } from '@react-navigation/native';
 import { generateFakeGrowthData } from '../components/fakeGrowthdata';
+import { BASE_URL } from '../../constants/API';
 
 const GrowthTrendsScreen = () => {
   const [weight, setWeight] = useState('');
@@ -36,7 +37,8 @@ const GrowthTrendsScreen = () => {
            text: 'Load Saved',
            onPress: async () => {
              try {
-               const response = await fetch('https://nicu-grad-api.onrender.com/growth');
+              const response = await fetch(`${BASE_URL}/growth`);
+
                if (!response.ok) throw new Error('Failed to fetch growth data');
               
                const growthData = await response.json();
@@ -75,7 +77,7 @@ const GrowthTrendsScreen = () => {
     const today = new Date().toISOString();  // ISO format expected for measuredAt
   
     try {
-      const response = await fetch('https://nicu-grad-api.onrender.com/growth', {
+      const response = await fetch(`${BASE_URL}/growth`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +138,7 @@ const GrowthTrendsScreen = () => {
 
   const fetchGrowthEntries = async () => {
     try {
-      const response = await fetch('https://nicu-grad-api.onrender.com/growth');
+      const response = await fetch(`${BASE_URL}/growth`);
       if (!response.ok) throw new Error('Failed to fetch growth entries');
   
       const growthData = await response.json();
