@@ -4,6 +4,7 @@
     "slug": "nicu_grad_frontend",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme":"nicu-grad",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
