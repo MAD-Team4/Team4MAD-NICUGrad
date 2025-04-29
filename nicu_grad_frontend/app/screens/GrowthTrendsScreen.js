@@ -199,6 +199,20 @@ const GrowthTrendsScreen = () => {
 
       <LineGraph data={graphData} title="Weight Progress" yAxisSuffix="g" />
       
+      {entries.length > 0 && (
+       <View style={styles.noteCard}>
+         <Text style={styles.noteTitle}>Most Recent Note:</Text>
+         <Text style={styles.noteDate}>
+           {entries[entries.length - 1].date}
+         </Text>
+         <Text style={styles.noteText}>
+           {entries[entries.length - 1].notes || 'No notes recorded.'}
+         </Text>
+      </View>
+)}
+
+
+      
     </ScrollView>
   );
 };
@@ -260,6 +274,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     textAlignVertical: 'top',
   },
+  noteCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  noteTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  noteDate: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 4,
+  },
+  noteText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  
 });
 
 export default GrowthTrendsScreen;
