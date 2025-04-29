@@ -19,7 +19,7 @@ app.use('/growth', require('./routes/growth'));
 // app.use('/diaper', require('./routes/diaper'));
 // app.use('/medication', require('./routes/medication'));
 // app.use('/vitals', require('./routes/vitals'));
-// app.use('/sleep', require('./routes/sleep'));
+ app.use('/sleep', require('./routes/sleep'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -50,11 +50,12 @@ model Vitals {
 }
 
 model SleepLog {
-  id         Int      @id @default(autoincrement())
-  startTime  DateTime
-  endTime    DateTime
-  quality    String?  // e.g., "good", "light", "interrupted"
+  id              Int      @id @default(autoincrement())
+  sleepDate       DateTime
+  durationMinutes Int
+  quality         String?
 }
+
 
 model HealthEvent {
   id          Int      @id @default(autoincrement())
