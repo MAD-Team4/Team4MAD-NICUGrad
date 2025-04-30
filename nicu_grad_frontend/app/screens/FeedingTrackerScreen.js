@@ -22,36 +22,49 @@ export default function FeedingTrackerScreen() {
     ? (parseFloat(postWeight) - parseFloat(preWeight)).toFixed(2)
     : '';
 
-  const handleSave = async () => {
-    const measuredAt = feedEndTime.toISOString();
-
-    try {
-      const response = await fetch(`${BASE_URL}/feeding`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          method: feedingMethod,
-          side: feedingMethod === 'breast' ? breastSide : undefined,
-          duration: duration ? parseFloat(duration) : null,
-          volume: feedingMethod === 'pumping' ? pumpedQty : volume,
-          weightBeforeG: preWeight ? parseFloat(preWeight) : null,
-          weightAfterG: postWeight ? parseFloat(postWeight) : null,
-          intakeG: intakeAmount ? parseFloat(intakeAmount) : null,
-          measuredAt,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to save feeding entry');
-
-      Alert.alert('Success', 'Feeding entry saved!');
-      clearForm();
-    } catch (error) {
-      console.error('Error saving feeding entry:', error);
-      Alert.alert('Error', 'Could not save the feeding entry.');
-    }
-  };
+    const handleSave = async () => {
+        if (!feedingMethod || !feedEndTime) {
+          Alert.alert('Missing Info', 'Feeding method and end time are required.');
+          return;
+        }
+      
+        const measuredAt = feedEndTime.toISOString();
+      
+        const payload = {
+            method: feedingMethod,
+            side: feedingMethod === 'breast' ? breastSide : null,
+            duration: duration ? parseFloat(duration) : null,
+            volume: (feedingMethod === 'pumping' ? pumpedQty : volume) ? parseFloat(feedingMethod === 'pumping' ? pumpedQty : volume) : null,
+            weightBeforeG: feedingMethod === 'breast' && preWeight ? parseFloat(preWeight) : null,
+            weightAfterG: feedingMethod === 'breast' && postWeight ? parseFloat(postWeight) : null,
+            intakeG: feedingMethod === 'breast' && intakeAmount ? parseFloat(intakeAmount) : null,
+            measuredAt,
+          };
+          
+      
+        console.log('Sending payload to backend:', payload);
+      
+        try {
+          const response = await fetch(`${BASE_URL}/feeding`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+      
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server returned:', response.status, errorText);
+            throw new Error(`Server error: ${response.status}`);
+          }
+      
+          Alert.alert('Success', 'Feeding entry saved!');
+          clearForm();
+        } catch (error) {
+          console.error('Save error:', error);
+          Alert.alert('Error', 'Failed to save feeding entry. Please try again.');
+        }
+      };
+      
 
   const clearForm = () => {
     setDuration('');
@@ -95,21 +108,48 @@ export default function FeedingTrackerScreen() {
       </View>
 
       {feedingMethod === 'breast' && (
-        <>
-          <Text style={styles.label}>Side:</Text>
-          <View style={styles.row}>
-            {['left', 'right'].map(side => (
-              <TouchableOpacity key={side} onPress={() => setBreastSide(side)}>
-                <Text style={[styles.methodButton, breastSide === side && styles.active]}>
-                  {side}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <Text style={styles.label}>Duration (min):</Text>
-          <TextInput style={styles.input} keyboardType="numeric" value={duration} onChangeText={setDuration} />
-        </>
-      )}
+  <>
+    <Text style={styles.label}>Side:</Text>
+    <View style={styles.row}>
+      {['left', 'right'].map(side => (
+        <TouchableOpacity key={side} onPress={() => setBreastSide(side)}>
+          <Text style={[styles.methodButton, breastSide === side && styles.active]}>
+            {side}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+
+    <Text style={styles.label}>Duration (min):</Text>
+    <TextInput
+      style={styles.input}
+      keyboardType="numeric"
+      value={duration}
+      onChangeText={setDuration}
+    />
+
+    <Text style={styles.label}>Pre-feed Weight (g):</Text>
+    <TextInput
+      style={styles.input}
+      keyboardType="numeric"
+      value={preWeight}
+      onChangeText={setPreWeight}
+    />
+    <Text style={styles.label}>Post-feed Weight (g):</Text>
+    <TextInput
+      style={styles.input}
+      keyboardType="numeric"
+      value={postWeight}
+      onChangeText={setPostWeight}
+    />
+
+    {intakeAmount && (
+      <Text style={{ marginTop: 10 }}>Estimated Intake: {intakeAmount} g</Text>
+    )}
+  </>
+)}
+
+
 
       {feedingMethod === 'bottle' || feedingMethod === 'tube' ? (
         <>
@@ -127,10 +167,10 @@ export default function FeedingTrackerScreen() {
         </>
       )}
 
-      <Text style={styles.label}>Pre-feed Weight (g):</Text>
+      {/* <Text style={styles.label}>Pre-feed Weight (g):</Text>
       <TextInput style={styles.input} keyboardType="numeric" value={preWeight} onChangeText={setPreWeight} />
       <Text style={styles.label}>Post-feed Weight (g):</Text>
-      <TextInput style={styles.input} keyboardType="numeric" value={postWeight} onChangeText={setPostWeight} />
+      <TextInput style={styles.input} keyboardType="numeric" value={postWeight} onChangeText={setPostWeight} /> */}
 
       {intakeAmount && (
         <Text style={{ marginTop: 10 }}>Estimated Intake: {intakeAmount} g</Text>
