@@ -109,6 +109,25 @@ export default function FeedingTrackerScreen() {
 
       {feedingMethod === 'breast' && (
   <>
+    <Text style={styles.label}>Side:</Text>
+    <View style={styles.row}>
+      {['left', 'right'].map(side => (
+        <TouchableOpacity key={side} onPress={() => setBreastSide(side)}>
+          <Text style={[styles.methodButton, breastSide === side && styles.active]}>
+            {side}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+
+    <Text style={styles.label}>Duration (min):</Text>
+    <TextInput
+      style={styles.input}
+      keyboardType="numeric"
+      value={duration}
+      onChangeText={setDuration}
+    />
+
     <Text style={styles.label}>Pre-feed Weight (g):</Text>
     <TextInput
       style={styles.input}
@@ -123,11 +142,13 @@ export default function FeedingTrackerScreen() {
       value={postWeight}
       onChangeText={setPostWeight}
     />
+
     {intakeAmount && (
       <Text style={{ marginTop: 10 }}>Estimated Intake: {intakeAmount} g</Text>
     )}
   </>
 )}
+
 
 
       {feedingMethod === 'bottle' || feedingMethod === 'tube' ? (
