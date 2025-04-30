@@ -8,16 +8,16 @@ datasource db {
 }
 
 model Feeding {
-  id            Int      @id @default(autoincrement())
-  method        String   // 'breast', 'bottle', 'tube'
-  side          String?  // 'left' or 'right' if breast
-  volume        Int?     // for bottle/tube
-  duration      Int?     // in minutes
-  pumpedVolume  Int?     // if pumping
-  preWeight     Float?   // optional weight before feeding
-  postWeight    Float?   // optional weight after feeding
-  endedAt       DateTime @default(now())
-  nextDue       DateTime?
+  id             Int      @id @default(autoincrement())
+  method         String
+  side           String?     // Only for breast feeding
+  duration       Float?      // In minutes
+  volume         Float?      // In ml, pumped or bottle/tube
+  weightBeforeG  Float?      // Child weight before feeding
+  weightAfterG   Float?      // Child weight after feeding
+  intakeG        Float?      // Estimated milk intake (g)
+  measuredAt     DateTime
+  createdAt      DateTime @default(now())
 }
 
 model Diaper {
