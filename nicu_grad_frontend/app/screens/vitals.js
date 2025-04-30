@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const VitalsScreen = ({ navigation }) => {
@@ -8,6 +9,8 @@ const VitalsScreen = ({ navigation }) => {
   const [br, setBr] = useState('');
   const [spo2, setSpo2] = useState('');
   const [note, setNote] = useState('');
+  const [showHistory, setShowHistory] = useState(false);
+  const router = useRouter();
   const [vitals, setVitals] = useState([
     //Demo data
     {
@@ -33,56 +36,89 @@ const VitalsScreen = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.header}> Vitals</Text>
-      {/* Most Recent Vitals Card */}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Most Recent Entry</Text>
-        {latestVital ? (
-          <>
-            <VitalRow icon="thermometer" label="Temp" value={`${latestVital.temp}°F`} />
-            <VitalRow icon="heart-pulse" label="HR" value={`${latestVital.hr} bpm`} />
-            <VitalRow icon="lungs" label="BR" value={`${latestVital.br}/min`} />
-            <VitalRow icon="water-percent" label="O2" value={`${latestVital.spo2}%`} />
-            {latestVital.note ? <Text style={styles.note}>Note: {latestVital.note}</Text> : null}
-            <Text style={styles.time}>{latestVital.timestamp}</Text>
-          </>
-        ) : (
-          <Text style={styles.noVitals}>No vitals logged yet.</Text>
-        )}
-      </View>
-
-      {/* Input for New Vitals */}
-      <Text style={styles.sectionTitle}>Add New Vitals</Text>
-      <View style={styles.inputCard}>
-        <VitalInput icon="thermometer" label="Temperature (°F)" value={temp} onChange={setTemp} keyboardType="numeric" />
-        <VitalInput icon="heart-pulse" label="Heart Rate (bpm)" value={hr} onChange={setHr} keyboardType="numeric" />
-        <VitalInput icon="lungs" label="Breathing Rate" value={br} onChange={setBr} keyboardType="numeric" />
-        <VitalInput icon="water-percent" label="Oxygen Saturation (%)" value={spo2} onChange={setSpo2} keyboardType="numeric" />
-        <TextInput
-          style={styles.noteInput}
-          placeholder="Notes (optional)"
-          value={note}
-          onChangeText={setNote}
-        />
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: allFieldsFilled ? '#00B894' : '#B2BEC3' }]}
-          onPress={logVital}
-          disabled={!allFieldsFilled}
-        >
-          <Text style={styles.buttonText}>Add Vitals Entry</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* See Past Vitals Button */}
-      <TouchableOpacity
-        style={styles.seeAllButton}
-        onPress={() => navigation.navigate('VitalsHistory', { vitals })} // Pass vitals, or fetch on next screen
-      >
-        <Text style={styles.seeAllButtonText}>See Past Vitals</Text>
+      <TouchableOpacity style={styles.backArrow} onPress={() => router.back()}>
+        <MaterialCommunityIcons name="arrow-left" size={26} color="#0984e3" />
       </TouchableOpacity>
+
+      <Text style={styles.header}>Vitals</Text>
+
+      {showHistory ? (
+      <>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Vitals History</Text>
+          {vitals.length > 0 ? (
+            vitals.map((entry, index) => (
+              <View key={index} style={styles.vitalEntryCard}>
+                <Text style={styles.entryTimestamp}>{entry.timestamp}</Text>
+                <Text><Text style={styles.entryLabel}>Temp:</Text> {entry.temp}°F</Text>
+                <Text><Text style={styles.entryLabel}>HR:</Text> {entry.hr} bpm</Text>
+                <Text><Text style={styles.entryLabel}>BR:</Text> {entry.br}/min</Text>
+                <Text><Text style={styles.entryLabel}>O2:</Text> {entry.spo2}%</Text>
+                {entry.note ? (
+                  <Text><Text style={styles.entryLabel}>Note:</Text> {entry.note}</Text>
+                ) : null}
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noVitals}>No vitals logged yet.</Text>
+          )}
+        </View>
+
+        {showHistory && (
+          <TouchableOpacity style={styles.backArrow} onPress={() => setShowHistory(false)}>
+            <MaterialCommunityIcons name="arrow-left" size={26} color="#0984e3" />
+          </TouchableOpacity>
+        )}
+      </>
+      ) : (
+        <>
+          {/* Summary */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Most Recent Entry</Text>
+            {latestVital ? (
+              <>
+                <VitalRow icon="thermometer" label="Temp" value={`${latestVital.temp}°F`} />
+                <VitalRow icon="heart-pulse" label="HR" value={`${latestVital.hr} bpm`} />
+                <VitalRow icon="lungs" label="BR" value={`${latestVital.br}/min`} />
+                <VitalRow icon="water-percent" label="O2" value={`${latestVital.spo2}%`} />
+                {latestVital.note ? <Text style={styles.note}>Note: {latestVital.note}</Text> : null}
+                <Text style={styles.time}>{latestVital.timestamp}</Text>
+              </>
+            ) : (
+              <Text style={styles.noVitals}>No vitals logged yet.</Text>
+            )}
+          </View>
+
+          <Text style={styles.sectionTitle}>Add New Vitals</Text>
+          <View style={styles.inputCard}>
+            <VitalInput icon="thermometer" label="Temperature (°F)" value={temp} onChange={setTemp} keyboardType="numeric" />
+            <VitalInput icon="heart-pulse" label="Heart Rate (bpm)" value={hr} onChange={setHr} keyboardType="numeric" />
+            <VitalInput icon="lungs" label="Breathing Rate" value={br} onChange={setBr} keyboardType="numeric" />
+            <VitalInput icon="water-percent" label="Oxygen Saturation (%)" value={spo2} onChange={setSpo2} keyboardType="numeric" />
+            <TextInput
+              style={styles.noteInput}
+              placeholder="Notes (optional)"
+              value={note}
+              onChangeText={setNote}
+            />
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: allFieldsFilled ? '#00B894' : '#B2BEC3' }]}
+              onPress={logVital}
+              disabled={!allFieldsFilled}
+            >
+              <Text style={styles.buttonText}>Add Vitals Entry</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.seeAllButton} onPress={() => setShowHistory(true)}>
+            <Text style={styles.seeAllButtonText}>See Past Vitals</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </ScrollView>
   );
 };
+
 
 // Row for displaying a vital sign in the card
 const VitalRow = ({ icon, label, value }) => (
@@ -230,7 +266,32 @@ const styles = StyleSheet.create({
     color: '#fff', 
     fontWeight: 'bold', 
     fontSize: 17 
-  }
+  },
+  vitalEntryCard: {
+    backgroundColor: '#f1f2f6',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 12,
+    width: '100%',
+  },
+  entryTimestamp: {
+    fontSize: 13,
+    color: '#636e72',
+    marginBottom: 6,
+    fontStyle: 'italic',
+  },
+  entryLabel: {
+    fontWeight: 'bold',
+    color: '#2d3436',
+  },
+  backArrow: {
+    position: 'absolute',
+    top: 14,
+    left: 14,
+    padding: 4,
+    zIndex: 10,
+    marginBottom: 30
+  }  
 });
 
 export default VitalsScreen;
