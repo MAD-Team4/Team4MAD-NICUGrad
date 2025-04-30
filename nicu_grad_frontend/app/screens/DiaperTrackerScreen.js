@@ -61,12 +61,9 @@ export default function DiaperTrackerScreen() {
   };
 
   const handleCancel = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      navigation.navigate('/');
-    }
+    router.back(); // goes back in the navigation stack
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
