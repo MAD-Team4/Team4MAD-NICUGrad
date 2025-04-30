@@ -3,11 +3,11 @@ import {
   View, Text, ScrollView, StyleSheet, Alert,
   TouchableOpacity
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useRouter} from 'expo-router';
 import { BASE_URL } from '../../constants/API';
 
 export default function DiaperHistoryScreen() {
-  const navigation = useNavigation();
+  const router = useRouter();
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
@@ -27,8 +27,7 @@ export default function DiaperHistoryScreen() {
   };
 
   const handleBack = () => {
-    if (navigation.canGoBack()) navigation.goBack();
-    else navigation.navigate('/');
+    router.back();
   };
 
   return (

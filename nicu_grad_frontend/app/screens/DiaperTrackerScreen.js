@@ -4,11 +4,11 @@ import {
   ScrollView, StyleSheet, Alert
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { BASE_URL } from '../../constants/API';
 
 export default function DiaperTrackerScreen() {
-  const navigation = useNavigation();
+  const router = useRouter();
   const [wetCount, setWetCount] = useState('');
   const [dirtyCount, setDirtyCount] = useState('');
   const [diaperWeight, setDiaperWeight] = useState('');
@@ -135,7 +135,7 @@ export default function DiaperTrackerScreen() {
         />
       )}
 
-      <TouchableOpacity onPress={() => navigation.navigate('/diaper/history')}>
+      <TouchableOpacity onPress={() => router.push('/diaper/history')}>
         <Text style={{ color: '#007AFF', marginTop: 16, fontSize: 16 }}>
           View Diaper History →
         </Text>
