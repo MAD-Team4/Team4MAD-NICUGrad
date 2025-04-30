@@ -21,12 +21,15 @@ model Feeding {
 }
 
 model Diaper {
-  id          Int      @id @default(autoincrement())
-  type        String   // 'wet', 'dirty', or 'mixed'
-  weightGrams Int?     // for I/O tracking
-  frequency   Int?     // times per day (optional summary)
-  createdAt   DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  wetCount     Int
+  dirtyCount   Int
+  stoolNotes   String?
+  diaperWeight Float?
+  measuredAt   DateTime
+  createdAt    DateTime @default(now())
 }
+
 
 model Medication {
   id           Int      @id @default(autoincrement())
