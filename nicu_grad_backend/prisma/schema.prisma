@@ -47,10 +47,16 @@ model Growth {
 }
 
 model Vitals {
-  id        Int      @id @default(autoincrement())
-  tempC     Float
-  recordedAt DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  temp       Float
+  hr         Int
+  br         Int
+  spo2       Int
+  note       String?
+  measuredAt DateTime
+  createdAt  DateTime @default(now())
 }
+
 
 model SleepLog {
   id              Int      @id @default(autoincrement())
