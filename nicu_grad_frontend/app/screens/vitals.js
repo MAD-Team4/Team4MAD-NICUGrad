@@ -28,11 +28,34 @@ const VitalsScreen = ({ navigation }) => {
 
   const allFieldsFilled = temp && hr && br && spo2;
 
-  const logVital = () => {
-    const timestamp = new Date().toLocaleString();
-    setVitals([{ temp, hr, br, spo2, note, timestamp }, ...vitals]);
-    setTemp(''); setHr(''); setBr(''); setSpo2(''); setNote('');
+  // const logVital = () => {
+  //   const timestamp = new Date().toLocaleString();
+  //   setVitals([{ temp, hr, br, spo2, note, timestamp }, ...vitals]);
+  //   setTemp(''); setHr(''); setBr(''); setSpo2(''); setNote('');
+  // };
+
+  const logVital = async () => {
+    const timestamp = new Date().toISOString();
+    const newEntry = { temp, hr, br, spo2, note, timestamp };
+  
+    try {
+      const response = await fetch(`${BASE_URL}/vitals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newEntry),
+      });
+  
+      if (!response.ok) throw new Error('Failed to save vitals');
+      const saved = await response.json();
+  
+      setVitals([saved, ...vitals]); // Update frontend state
+      setTemp(''); setHr(''); setBr(''); setSpo2(''); setNote('');
+    } catch (error) {
+      console.error('Error saving vitals:', error);
+      Alert.alert('Error', 'Failed to save vitals.');
+    }
   };
+    
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">

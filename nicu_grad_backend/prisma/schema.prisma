@@ -32,11 +32,15 @@ model Diaper {
 
 
 model Medication {
-  id           Int      @id @default(autoincrement())
-  name         String
-  dosage       String
-  givenAt      DateTime @default(now())
-  nextDoseDue  DateTime
+  id          Int      @id @default(autoincrement())
+  name        String
+  dosage      String
+  frequency   String
+  hours       Int
+  duration    String
+  lastTaken   DateTime?
+  nextDue     DateTime?
+  createdAt   DateTime @default(now())
 }
 
 model Growth {
@@ -46,15 +50,15 @@ model Growth {
   notes      String? // <-- New: Optional health notes
 }
 
+
 model Vitals {
-  id         Int      @id @default(autoincrement())
-  temp       Float
-  hr         Int
-  br         Int
-  spo2       Int
-  note       String?
-  measuredAt DateTime
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  temp      String
+  hr        String
+  br        String
+  spo2      String
+  note      String?
+  timestamp DateTime @default(now())
 }
 
 
