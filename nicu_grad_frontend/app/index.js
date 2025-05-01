@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Link } from 'expo-router';
 
+
 const tools = [
   'Feeding',
   'Diaper',

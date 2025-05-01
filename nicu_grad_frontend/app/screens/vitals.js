@@ -12,7 +12,7 @@ const VitalsScreen = ({ navigation }) => {
   const [showHistory, setShowHistory] = useState(false);
   const router = useRouter();
   const [vitals, setVitals] = useState([
-    //Demo data
+    //Example data
     {
       temp: '97.8',
       hr: '128',
@@ -28,12 +28,14 @@ const VitalsScreen = ({ navigation }) => {
 
   const allFieldsFilled = temp && hr && br && spo2;
 
+  // Logs the vital
   const logVital = () => {
     const timestamp = new Date().toLocaleString();
     setVitals([{ temp, hr, br, spo2, note, timestamp }, ...vitals]);
     setTemp(''); setHr(''); setBr(''); setSpo2(''); setNote('');
   };
 
+  // Handles different views.
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <TouchableOpacity style={styles.backArrow} onPress={() => router.back()}>
